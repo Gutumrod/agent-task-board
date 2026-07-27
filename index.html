@@ -2531,7 +2531,7 @@
       try {
         const handle = await idbGet('taskFileHandle');
         if (!handle) return;
-        const perm = await handle.queryPermission({ mode: 'readwrite' });
+        const perm = await handle.queryPermission({ mode: 'read' });
         if (perm !== 'granted') return;
         await loadTaskFileFromHandle(handle, 'Restored');
       } catch (e) { console.log('Restore skipped:', e.message); }
