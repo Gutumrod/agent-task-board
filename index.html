@@ -1207,6 +1207,7 @@
       <div class="view-toggle" id="mainTabToggle">
         <button id="tasksTabBtn" class="active">Tasks</button>
         <button id="memoryTabBtn">Memory</button>
+        <button id="requestsTabBtn">Requests</button>
       </div>
       <div class="view-toggle" id="taskViewToggle">
         <button id="boardViewBtn" class="active">Board</button>
@@ -1219,6 +1220,7 @@
     <div class="buttons">
       <button id="openTaskBtn">Select File</button>
       <button id="openMemoryBtn" style="display: none;">Open Folder</button>
+      <button id="openRequestsBtn" style="display: none;">Select room/ Folder</button>
       <button id="saveBtn" class="primary" disabled style="display: none;">Save</button>
     </div>
   </header>
@@ -1245,6 +1247,21 @@
       <div class="memory-content-area">
         <div id="memoryContentContainer"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- REQUESTS TAB PANEL -->
+  <div class="tab-panel" id="requestsPanel">
+    <div id="requestsEmptyState" class="empty-state">
+      <p style="margin-bottom: 24px; font-size: 18px; font-weight: 600; color: var(--text-primary);">Select the task-board/room/ folder</p>
+      <button id="openRequestsBtnLarge">Select room/ Folder</button>
+    </div>
+    <div id="requestsMainContent" style="display: none; flex-direction: column; min-height: 0; flex: 1; overflow-y: auto;">
+      <div class="stats" id="requestsStats"></div>
+      <h2>Open</h2>
+      <div id="requestsOpenContainer" style="margin-bottom: 24px;"></div>
+      <h2>Closed</h2>
+      <div id="requestsClosedContainer"></div>
     </div>
   </div>
 
@@ -1281,11 +1298,14 @@
     // ===== MAIN TAB SWITCHING =====
     const tasksTabBtn = document.getElementById('tasksTabBtn');
     const memoryTabBtn = document.getElementById('memoryTabBtn');
+    const requestsTabBtn = document.getElementById('requestsTabBtn');
     const tasksPanel = document.getElementById('tasksPanel');
     const memoryPanel = document.getElementById('memoryPanel');
+    const requestsPanel = document.getElementById('requestsPanel');
     const taskViewToggle = document.getElementById('taskViewToggle');
     const openTaskBtn = document.getElementById('openTaskBtn');
     const openMemoryBtn = document.getElementById('openMemoryBtn');
+    const openRequestsBtn = document.getElementById('openRequestsBtn');
     const saveBtn = document.getElementById('saveBtn');
 
     function switchMainTab(tab) {
@@ -1293,9 +1313,11 @@
 
       tasksTabBtn.classList.toggle('active', tab === 'tasks');
       memoryTabBtn.classList.toggle('active', tab === 'memory');
+      requestsTabBtn.classList.toggle('active', tab === 'requests');
 
       tasksPanel.classList.toggle('active', tab === 'tasks');
       memoryPanel.classList.toggle('active', tab === 'memory');
+      requestsPanel.classList.toggle('active', tab === 'requests');
 
       // Show/hide view toggle for tasks
       taskViewToggle.style.display = tab === 'tasks' ? 'flex' : 'none';
@@ -1303,18 +1325,22 @@
       // Show/hide appropriate buttons
       openTaskBtn.style.display = tab === 'tasks' ? 'inline-flex' : 'none';
       openMemoryBtn.style.display = tab === 'memory' ? 'inline-flex' : 'none';
+      openRequestsBtn.style.display = tab === 'requests' ? 'inline-flex' : 'none';
       saveBtn.style.display = tab === 'tasks' ? 'inline-flex' : 'none';
 
       // Update file path display
       if (tab === 'tasks') {
         filePathEl.textContent = taskFileHandle ? taskFileName : '';
-      } else {
+      } else if (tab === 'memory') {
         filePathEl.textContent = memoryDirHandle ? memoryDirHandle.name : '';
+      } else {
+        filePathEl.textContent = requestsDirHandle ? requestsDirHandle.name : '';
       }
     }
 
     tasksTabBtn.addEventListener('click', () => switchMainTab('tasks'));
     memoryTabBtn.addEventListener('click', () => switchMainTab('memory'));
+    requestsTabBtn.addEventListener('click', () => switchMainTab('requests'));
 
     // ============================================================
     // ===== TASKS FUNCTIONALITY =====
@@ -2556,6 +2582,118 @@
     window.addEventListener('beforeunload', (e) => {
       if (hasChanges) { e.preventDefault(); e.returnValue = ''; }
     });
+
+    // ============================================================
+    // ===== REQUESTS FUNCTIONALITY (room/open + room/closed) =====
+    // ============================================================
+
+    let requestsDirHandle = null;
+    let requestsData = { open: [], closed: [] };
+
+    const requestsEmptyState = document.getElementById('requestsEmptyState');
+    const requestsMainContent = document.getElementById('requestsMainContent');
+    const requestsStats = document.getElementById('requestsStats');
+    const requestsOpenContainer = document.getElementById('requestsOpenContainer');
+    const requestsClosedContainer = document.getElementById('requestsClosedContainer');
+
+    // ponytail: minimal frontmatter parser — good enough for the flat key: value
+    // block this project's room files use, not a general YAML parser
+    function parseRoomMarkdown(content) {
+      const fm = {};
+      let body = content;
+      const match = content.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+      if (match) {
+        match[1].split('\n').forEach(line => {
+          const i = line.indexOf(':');
+          if (i === -1) return;
+          fm[line.slice(0, i).trim()] = line.slice(i + 1).trim().replace(/^"|"$/g, '');
+        });
+        body = match[2];
+      }
+      return { fm, body };
+    }
+
+    async function readRoomFolder(dirHandle) {
+      const items = [];
+      for await (const [name, handle] of dirHandle.entries()) {
+        if (handle.kind !== 'file' || !name.endsWith('.md')) continue;
+        const file = await handle.getFile();
+        const content = await file.text();
+        const { fm, body } = parseRoomMarkdown(content);
+        items.push({ name, fm, body, fileHandle: handle });
+      }
+      items.sort((a, b) => (b.fm.opened || '').localeCompare(a.fm.opened || ''));
+      return items;
+    }
+
+    function requestCard(item) {
+      const card = document.createElement('div');
+      card.className = 'file-card';
+      const title = `${item.fm.from || '?'} → ${item.fm.to || '?'}: ${item.name.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '')}`;
+      card.innerHTML = `
+        <div class="file-card-header">
+          <div>
+            <div class="file-card-title">${title}</div>
+            <div class="file-path">opened ${item.fm.opened || '?'}${item.fm.task_board_card ? ' — card: ' + item.fm.task_board_card : ''}</div>
+          </div>
+        </div>
+        <div class="file-card-content">${item.body.replace(/</g, '&lt;')}</div>
+      `;
+      card.querySelector('.file-card-header').addEventListener('click', () => {
+        card.querySelector('.file-card-content').classList.toggle('expanded');
+      });
+      return card;
+    }
+
+    function renderRequests() {
+      requestsStats.innerHTML = `
+        <div class="stat"><div class="stat-value">${requestsData.open.length}</div><div class="stat-label">open</div></div>
+        <div class="stat"><div class="stat-value">${requestsData.closed.length}</div><div class="stat-label">closed</div></div>
+      `;
+      requestsOpenContainer.innerHTML = '';
+      requestsData.open.forEach(item => requestsOpenContainer.appendChild(requestCard(item)));
+      if (!requestsData.open.length) requestsOpenContainer.innerHTML = '<p style="color: var(--text-muted);">ไม่มีคำขอค้าง</p>';
+      requestsClosedContainer.innerHTML = '';
+      requestsData.closed.forEach(item => requestsClosedContainer.appendChild(requestCard(item)));
+      if (!requestsData.closed.length) requestsClosedContainer.innerHTML = '<p style="color: var(--text-muted);">ยังไม่มีคำขอที่ปิดแล้ว</p>';
+    }
+
+    async function loadFromRequestsHandle(dirHandle) {
+      requestsDirHandle = dirHandle;
+      const openDir = await dirHandle.getDirectoryHandle('open');
+      const closedDir = await dirHandle.getDirectoryHandle('closed');
+      requestsData.open = await readRoomFolder(openDir);
+      requestsData.closed = await readRoomFolder(closedDir);
+      requestsEmptyState.style.display = 'none';
+      requestsMainContent.style.display = 'flex';
+      filePathEl.textContent = dirHandle.name;
+      renderRequests();
+    }
+
+    async function openRequestsFolder() {
+      try {
+        const dirHandle = await window.showDirectoryPicker();
+        await loadFromRequestsHandle(dirHandle);
+        await idbSet('requestsDirHandle', dirHandle);
+        showStatus('Loaded ' + dirHandle.name);
+      } catch (e) {
+        if (e.name !== 'AbortError') showStatus('Error: ' + e.message);
+      }
+    }
+
+    async function tryRestoreRequestsFolder() {
+      try {
+        const handle = await idbGet('requestsDirHandle');
+        if (!handle) return;
+        const perm = await handle.queryPermission({ mode: 'read' });
+        if (perm !== 'granted') return;
+        await loadFromRequestsHandle(handle);
+      } catch (e) { console.log('Requests restore skipped:', e.message); }
+    }
+
+    document.getElementById('openRequestsBtn').addEventListener('click', openRequestsFolder);
+    document.getElementById('openRequestsBtnLarge').addEventListener('click', openRequestsFolder);
+    tryRestoreRequestsFolder();
 
     // ============================================================
     // ===== MEMORY FUNCTIONALITY =====
