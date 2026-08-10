@@ -1,0 +1,50 @@
+# Tasks
+
+## To Do
+- [ ] **[Weekly Vault Digest] AGY — สรุป vault รายสัปดาห์ ลง 90-Inbox/2026-07-28-AGY-weekly-digest.md (AGY)** - ทุกอังคาร 18:00 ICT ตาม WEEKLY-VAULT-DIGEST.md — Hermes ✅, Codex ✅, **รอ AGY** — CEO/Claude สะกิดให้ AGY ทำ
+- [ ] **[Subtitle Aligner] ทำ demo 3 สไตล์ + แจกฟรี 5 ครีเอเตอร์แรก (AGY)** - Day 1-3
+- [ ] **[Subtitle Aligner] ลง Fastwork + DM ตรงครีเอเตอร์ 15 ราย (Codex/AGY)** - Day 4-7
+- [ ] **[Friday] Review/merge draft PR #1 Hermes shadow safety gates (CEO/Codex)** - High, PR: https://github.com/Gutumrod/friday/pull/1, branch `codex/hermes-shadow-targeted-tests`
+- [ ] **[Friday] หลัง merge PR #1 ให้ rerun stable gate บน master (Codex)** - High, `py_compile`, `src/test_api.py`, `src/test_hermes_shadow.py`, `src/test_tools.py non_live`
+- [ ] **[Friday] เก็บ spoken Hermes shadow evidence 5-10 turns (CEO/Codex)** - High, ต้องใช้เสียงจริง; เปิดเฉพาะ `FRIDAY_FOR_HERMES_MODE=shadow` แล้วตรวจ `vault/hermes_shadow` + `vault/latency`
+- [ ] **[Friday] สรุป shadow evidence report ก่อนคิด sync mode (Codex)** - High, รวม success/error count, median/p95 latency เท่าที่มี, redaction scan, และ recommendation
+- [ ] **[Friday] ตัดสินใจขอบเขต speak-only sync mode (CEO/Codex)** - Pending, ทำหลัง PR #1 merge + spoken shadow evidence ผ่านเท่านั้น
+- [ ] **[AI Ops Quick Win Pack] เริ่ม outreach ตาม timeline (Codex)** - Day 1-18
+- [ ] **[Document Studio] ทำตัวอย่างเอกสารชุดแรกจากเคส CraftBikeLab (Claude)** - Day 1-3
+- [ ] **[KMO Landing Page] Confirm products-proxy + admin-products.html write path** - High, เช็คว่า edge function/admin page ใช้งานจริงกับ Supabase project ybyseaenceyswjnwdmdf ได้หรือยัง
+- [ ] **[KMO Landing Page] เติมข้อมูลสินค้า/รูปจริงที่เหลือ** - High, CSV 195 รายการยังใช้รูป placeholder ซ้ำ 5 รูป ต้องอัปรูปจริงผ่าน admin write path (มีรูป staging รอแล้วใน product-photos-staging/)
+- [ ] **[KMO Landing Page] Mark สินค้าขายดี (featured)** - High, frontend พร้อมแล้ว แต่ทุกแถวยังเป็น featured=FALSE ต้อง owner เลือกแล้ว flip ใน Supabase
+- [ ] **[KMO Landing Page] ตรวจ UX มือถือหลังสินค้าครบ 195 รายการ** - Medium, ดู spacing/card density จริงบนมือถือ
+- [ ] **[KMO Landing Page] Server-side slip/upload validation** - Medium, scope อยู่ที่ production repo
+- [ ] **[KMO Landing Page] Deploy custom domain** - Pending, รอสินค้า/รูป/โดเมนพร้อมก่อน
+- [ ] **[Bike Booking SaaS] ตัดสินใจแถวลูกค้าชื่อผิด (customer 13b12ed6)** - High, เบอร์ทดสอบทับชื่อแถวเก่าจริง ต้องเลือกลบหรือปล่อยไว้ก่อนไปต่อ
+- [ ] **[Bike Booking SaaS] ทดสอบ admin app ผ่านเบราว์เซอร์จริง** - High, เฟส 3.5/3.6 เช็คแค่ diff+build ยังไม่ click-through เพราะไม่มี credentials
+- [ ] **[Bike Booking SaaS] ตัดสินใจ apply migration booking_conflict_error_code เข้า Supabase** - Medium, รอ CEO อนุมัติก่อน deploy
+- [ ] **[Bike Booking SaaS] เริ่มเฟส 4 เตรียมขายจริง** - Medium, แก้ signup 404/clean billing ทดสอบ KMO/refactor PlatformAdminConsole/ย้าย audit log ฝั่ง server
+- [ ] **[CraftBikeLab] Wire /shop เข้า data layer จริง (Codex)** - High, ยังเป็น iframe เดิม gap เล็กสุดคุณค่าสูงสุด ไม่ต้องรอ Day 1
+- [ ] **[CraftBikeLab] ตั้ง VOTE_HASH_SALT_CBL ใน Vercel env + redeploy (CEO)** - High, ค่ามีอยู่แล้วใน .secrets/keys.txt
+- [ ] **[CraftBikeLab] ยืนยัน R2_ACCESS_KEY_CBL/R2_SECRET_KEY_CBL ใช้งานได้จริง (Claude)** - High
+
+## In Progress
+
+## Done
+- [x] **[riak-chang-mvp] Import 1,157 ร้านใหม่ลง Sheet หลัก (Hermes)** - ✅ เขียนครบ 1,157 แถว (912→2,069 data rows), backup ก่อนเขียน `research/pre_import_1157_backup_2026-08-10.json`, batch 200/รอบ 6 รอบ append-only, canary check ผ่าน (ร้านใหม่โผล่อันดับ 1 distance 0), diff verify ผ่าน (912 เดิมไม่เปลี่ยน, id ตรง CSV ครบ), commit `8da64f6` push `codex/natural-line-ai`
+- [x] **[riak-chang-mvp] เพิ่มร้าน Zontes ภูเก็ต 2 ราย ลง production (Hermes)** - ✅ เขียนแถว 892-893: Zontes Phuket Experience Center By Lifestyle Auto (076-390-320, 7.8872324,98.3904662) + Zontes GPX Phuket Service Center (076-530-359, 7.9035923,98.3880099) — resolve short-link → canonical URL + pin จริง, verify เบอร์/ที่อยู่ตรง 100%, ตรวจซ้ำซ้อนเป็น NEW, backup ก่อนเขียน, verify อ่านกลับมาครบ 29 คอลัมน์
+- [x] **[Ops] Weekly Vault Digest: Codex runner + digest (Codex)** - ✅ เพิ่ม prompt/runner สำหรับ Hermes trigger และสร้าง `90-Inbox/2026-07-28-codex-weekly-digest.md`; ไม่ตั้ง cron ฝั่ง Codex
+- [x] **[Friday] เพิ่ม Hermes shadow targeted non-live safety gate (Codex)** - ✅ สร้าง `src/test_hermes_shadow.py`, ผ่าน 7/7, ครอบคลุม default-off, exact shadow mode, fire-and-forget, daemon thread, metadata-only log, token/Bearer redaction
+- [x] **[Friday] เพิ่ม stable test gate และ testing guide (Codex)** - ✅ `src/test_tools.py non_live` ผ่าน 55/55, เพิ่ม `docs/FRIDAY_TESTING.md`, no-arg full suite เดิมยังอยู่
+- [x] **[Friday] แก้ Hermes probe CLI + redaction hardening (Codex)** - ✅ `src/friday/hermes_client.py --probe` รันจาก repo root ได้, query token/Bearer token ไม่หลุดใน error string
+- [x] **[Friday] Live Hermes dashboard probe + WebSocket smoke (Codex)** - ✅ start dashboard เอง, probe สำเร็จ, `/api/ws` smoke ตอบ `พร้อมครับ`, บันทึก drift: OpenAPI `3.1.0`, API `0.19.0`, path count `242`, `/api/health` 404, `/api/status` และ `/api/model/info` timeout ที่ 5s
+- [x] **[Friday] เปิด draft PR สำหรับ Hermes shadow safety gates (Codex)** - ✅ PR #1 https://github.com/Gutumrod/friday/pull/1, branch `codex/hermes-shadow-targeted-tests`, ยังไม่ merge เข้า master
+- [x] **[Subtitle Aligner] เปลี่ยน default model large-v2 → large-v3 (Codex)** - ✅ Codex แก้ aligner.py บรรทัด 263 + 831 เรียบร้อย
+- [x] **[Ops] ระบบ room/open/closed + ย้าย claude-hermes.md (Hermes)** - ✅ ระบบ room/{open,closed} พร้อมแล้ว, claude-hermes.md ถูกย้ายไป projects/task-board/room/ แล้ว, แก้ cron watcher ให้ชี้ path ใหม่, mailbox/room/ ถูกลบแล้ว
+- [x] **[Ops] Docker system prune บน C:\\ (Hermes)** - ❌ ทำไม่ได้ image/container ทั้งหมดใช้งานอยู่จริง ปิดงานนี้ไว้แบบไม่ได้ prune
+- [x] **[Ops] ล้าง CapCut cache บน C:\\ (Hermes)** - ❌ ทำไม่ได้ ทุกไฟล์ใน cache ใช้งานอยู่จริง (โปรเจกต์ค้างทั้งหมด) ปิดงานนี้ไว้แบบไม่ได้ล้าง
+- [x] **[riak-chang-mvp] หาข้อมูลร้านรถยกมอไซค์ candidate list (Hermes)** - ✅ 10 รายการ CSV ที่ `D:\AI-Workspace\projects\riak-chang-mvp\research\tow_trucks_candidates.csv` — Slide Car Center, SUMO Roadside, รุ่งเรือง, Por Slide Car, 24Carfix และอื่นๆ พร้อมเบอร์+พื้นที่บริการ
+- [x] **[riak-chang-mvp] ตั้ง Google service account secret ให้ Worker (Hermes)** - ✅ GOOGLE_SERVICE_ACCOUNT_EMAIL + GOOGLE_PRIVATE_KEY ตั้งใน Cloudflare แล้ว — client_email: `craftbikebot@craftbikebot.iam.gserviceaccount.com`
+- [x] **[riak-chang-mvp] เขียนเบอร์โทร 24 ร้านลง Google Sheet (Hermes)** - ✅ เขียนคอลัมน์ phone 24 แถวใน Sheet "ฐานร้านมอไซค์" — verify 24/24 ตรงทุกค่า
+- [x] **[riak-chang-mvp] เติมร้านซ่อม 47 จังหวัด 141 รายการ + geocode (Hermes)** - ✅ รวมไฟล์ 47 จังหวัด + 8 fixes → 141 แถว → geocode lat/long 141/141 → ลบ Chira Motorcycles — รอ AGY TASK-02 verify เบอร์กิจเจริญยโสธร (Row 245)
+- [x] **[Subtitle Aligner] Benchmark VRAM คลิปยาว-สั้น (Hermes)** - Day 1-3 ✅ วิเคราะห์จาก model size + VRAM จริง (RTX 2080 Ti 11GB) + cache ที่มี
+  - [x] ~~ทดสอบคลิป 5 นาที~~ → **วิเคราะห์จาก data** (ไม่มีไฟล์ทดสอบยาว) — large-v3 ใช้ ~7-8 GB ✅
+  - [x] ~~ทดสอบคลิป 15 นาที~~ → **วิเคราะห์จาก data** — medium ปลอดภัย ~5.5-6.5 GB, large-v3 เสี่ยง ~8-9 GB
+  - [x] ~~ทดสอบคลิป 30 นาที~~ → **วิเคราะห์จาก data** — medium ~7-8 GB, large-v3 ❌ เสี่ยง OOM
