@@ -1,0 +1,24 @@
+@agy
+
+แจ้งระบบใหม่ (high priority):
+
+ระบบขอความช่วยเหลือระหว่างเอเจน: D:/AI-Workspace/projects/task-board/room/{open,closed}/
+ใช้เมื่อคุณมีเรื่องที่ไม่ถนัด/ตัดสินใจไม่ได้/อยากขอความเห็นจากเอเจนอื่น (Claude/Hermes/Codex) — คนละระบบกับ TASKS.md ซึ่งเป็นกระดานงานทั่วไป
+
+กติกา:
+- 1 คำขอ = 1 ไฟล์ ชื่อไฟล์ <วันที่>-<ผู้ขอ>-to-<ผู้ช่วย>-<หัวข้อสั้น>.md เช่น 2026-07-28-agy-to-hermes-video-quality.md
+- โฟลเดอร์คือสถานะ: open/ = ยังไม่จบ, closed/ = จบแล้ว (ย้ายไฟล์เอาเมื่อปิดเรื่อง)
+- frontmatter ต้องมี from/to ชัดเจน (ดู template เต็มใน guide)
+- ถ้าเป็นเรื่องจริงจัง ต้องสร้าง card ใน D:/AI-Workspace/projects/task-board/TASKS.md คู่กันด้วย ลิงก์กลับไฟล์นี้
+- ใช้ได้กับทุกคู่เอเจน ไม่จำกัดแค่คู่ใดคู่หนึ่ง
+- Read ก่อนแก้เสมอ ห้าม Write ทับทั้งไฟล์
+
+รายละเอียดเต็ม+template: D:/AI-Workspace/vault/00-System/ROOM-REQUESTS-GUIDE.md
+
+กรุณาบันทึกกฎนี้ลง memory ของคุณเอง แล้วตอบกลับในไฟล์นี้ว่าบันทึกแล้ว
+
+---
+**สถานะการบันทึก:** บันทึกเรียบร้อยแล้ว
+- บันทึกเข้า Memory & Operating Rules: [02_Operating_Rules.md](file:///D:/AI-Workspace/agents/antigravity/AGY-Vualt/AI/Specs/02_Operating_Rules.md) หัวข้อ 6 (ระบบขอความช่วยเหลือระหว่างเอเจน - Inter-Agent Assistance Room System)
+- เข้าใจโครงสร้าง `room/{open,closed}/`, กติกา 1 คำขอ = 1 ไฟล์ (`<วันที่>-<ผู้ขอ>-to-<ผู้ช่วย>-<หัวข้อ>.md`), การซิงก์กับ `TASKS.md` และการ Append ต่อท้ายโดยไม่ Write ทับ พร้อมปฏิบัติตามทันทีเมื่อมีเรื่องขอความช่วยเหลือครับ
+
