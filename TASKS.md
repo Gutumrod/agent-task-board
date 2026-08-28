@@ -1,7 +1,6 @@
 # Tasks
 
 ## To Do
-- [ ] **[SaaS Product Hub] CEO §10 — เหลือ HC01 scope ข้อเดียว (CEO)** - 🟡 **D1–D8 ตัดสินแล้ว 2026-08-27** (hostname=code host / HMAC แยก product / billing DB=schema ใน Project A / PawSpace ingress=narrow / casing=lowercase / CM01=template only / SLO 99% RTO 4h RPO 24h billing ≤1h / **PawSpace→Pawstia** — PawSpace ชน US trademark, Pawstia เช็ค collision ผ่าน, PS01+product_id ไม่เปลี่ยน). **ยังค้าง:** HC01 (Headless Commerce) scope — CEO จะเพิ่มเอกสาร ยังไม่เริ่ม DB/API. ดู `docs/platform/PORTFOLIO_PRODUCTION_MASTER_PLAN.md` §10
 - [ ] **[SaaS Product Hub] Pawstia rename residual (Codex/AGY)** - หลัง P0a: internal rename `pawspace`→`pawstia` (slug, UI copy, docs — ไม่แตะ product_id/PS01/repo), claim `@pawstia` IG/FB/X, formal TH trademark search จาก attorney ก่อน public launch. Gate PS-F
 - [ ] **[SaaS Product Hub] P0a portfolio foundation (Codex)** - repo map + CI definition (พิสูจน์บน hub-web + 1 product) + runtime matrix + evidence template + reconcile 5 เอกสารที่ขัดกับ code (BK01 "Done", PS01 COMMERCIAL_READINESS, HC01 phantom server, CM01 §A1, DC01 registry) — block ทุก product จนกว่าจะปิด P0a-C1
 - [x] **[SaaS Product Hub] Commander Final Review Gate — 2 production plans (Claude)** - ✅ REMEDIATE → CEO สั่งรับเป็นเส้นทางโปรเจกต์ → master plan revision 3: เพิ่ม §0 ตัด usage/demand ออกจาก planning input ตามกฎเหล็ก 2026-08-27, แยก P0a/P0b, focus gate แบบ binding, L0–L5 ladder ของขายขาด, fulfillment เป็น P1 deliverable, R13/R14. VOID 3 ส่วนในแผน Mac session ที่ใช้ demand จัดลำดับ
@@ -34,6 +33,7 @@
 ## In Progress
 
 ## Done
+- [x] **[SaaS Product Hub] CEO §10 decisions D1–D9 (CEO/Claude)** - ✅ ปิดครบ 2026-08-27 — hostname=code host, HMAC แยก product, billing DB=schema ใน Project A, PawSpace ingress=narrow, casing=lowercase, CM01=template only, SLO 99%/RTO 4h/RPO 24h (billing ≤1h), PawSpace→Pawstia (ชน US trademark), **D9 HC01 = deferred ไม่ตัด — scope ตัดสินตอน phase P5 ทำได้แค่ HC-A**. §10 ไม่ block P0a. `docs/platform/PORTFOLIO_PRODUCTION_MASTER_PLAN.md` §10
 - [x] **[Ops] C:\ data-loss recovery + AGY IDE data-dir fix + cross-agent charter rollout (Claude)** - ✅ Rebuilt wiped auto-memory (13 files), synced 9arm-skills/ponytail/agent-relay-dispatch into vault (unsynced before, commits `124134a`/`22a7612`), reinstalled `agy` CLI binary, found+fixed AGY IDE app was still on C:\ (GEMINI_DIR only ever covered the CLI — found `ANTIGRAVITY_EXECUTABLE_DATA_DIR` via string search in `language_server.exe`, set it, closed IDE pending CEO restart), verified 2026-08-23 crash timeline via Event Log (6 bugchecks, matches CEO's account), corrected two of my own wrong guesses on the record, rolled the CEO's working-relationship charter out to Claude/Codex/AGY. Full log: `06-Agent-Logs/2026-08-24-claude-commander-session-log.md`
 - [x] **[saas-product-hub] Stage 1 — booking quota/staff/top-up enforcement** - ✅ commit `ed06fa2` + `2472e12` — migration 547 บรรทัด + TOCTOU patch (pg_advisory_xact_lock) + QA PASS=6/FAIL=0
 - [x] **[saas-product-hub] Stage 2 — headless_commerce Stripe webhook signature** - ✅ commit `79c1d7c` — ก็อป webhook-receiver module + verify signature ก่อน + malformed JSON → 401, full suite 14/14
