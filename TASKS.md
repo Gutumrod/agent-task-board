@@ -46,7 +46,7 @@
 - [ ] **[CraftBikeLab] ยืนยัน R2_ACCESS_KEY_CBL/R2_SECRET_KEY_CBL ใช้งานได้จริง (Claude)** - High
 
 ## In Progress
-- [ ] **[WSTERA House] HOUSE-KICKOFF-001 รอ Owner ตัดสิน (Claude)** - 2026-09-26: readiness ผ่าน · S2 SB01 ไม่ทันเส้นตาย → A-03 · GO S7–S11 ใน `vault/06-Agent-Logs/WSTERA-House/OWNER-GO-S6-S11-2026-09-26.md` · เลือก Hermes ตัวหลักก่อนส่ง Swarm-1/2 · PR saas-product-hub#2, wstera-link#1 รอ merge
+- [ ] **[WSTERA House] รอ Owner (Claude)** - 2026-09-26: S7/S8/S9 เสร็จ (หน้าร้าน catalog 20/20) · ส่ง Swarm-1/3/4A ให้ Hermes ตาม `vault/06-Agent-Logs/WSTERA-House/briefs/HERMES-DISPATCH-MESSAGES-2026-09-26.md` · `codex login` ใหม่ · A-03 ชำระเงิน · อนุมัติร่าง license S12 · เลือกราคา PS01 · GO S10/S11
 - [ ] **[wstera-catalog] แก้บั๊กแคชหน้าลูกค้า (สำเนาสินค้าที่ถอดแล้วค้าง) + build ใหม่ (Codex)** - รอ Codex รายงาน "ทำแล้ว รอผู้ตรวจอิสระ" บน branch `phase2e-cache` → Claude ตรวจซ้ำ → เจ้าของอนุมัติ deploy · เหตุผล: เว็บโดน Error 1102 (CPU เกินแผนฟรี) เจ้าของยังไม่อัปเกรด ต้องส่งลิงก์ลูกค้าวันนี้ · รายละเอียด: `vault/06-Agent-Logs/wstera-catalog/2026-09-21-HANDOFF-next-chat.md`
   - [ ] ส่งลิงก์ลูกค้าได้เฉพาะหน้าปลีก `/p/bmw-c400gt` `/all` — ห้ามส่งลิงก์ตัวแทนจนกว่าตรวจราคาส่งรั่วเสร็จ
   - [ ] ส่วนลดต่อสินค้า (migration 0005 + ฟอร์ม AGY) หลังเว็บนิ่ง · Phase 3 og tag LINE หลังเว็บนิ่ง
