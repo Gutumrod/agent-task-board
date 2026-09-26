@@ -47,7 +47,7 @@
 - [ ] **[CraftBikeLab] ยืนยัน R2_ACCESS_KEY_CBL/R2_SECRET_KEY_CBL ใช้งานได้จริง (Claude)** - High
 
 ## In Progress
-- [ ] **[WSTERA House] Caretaker + independent queue (Codex / Claude Swarm lane)** - 2026-09-26: Codex ผู้คุม Git/STATUS; Swarm-1 R5 + Lane B มี claims และ LAB apply HOLD. ตรวจคิว 4A → 3 → 5A → 7, แก้บรีฟ current bases/R-3/reuse, ส่ง room ให้ Claude ตรวจ dispatch ค้าง; ยังไม่ BUILD_PASS/ไม่ได้เริ่ม Swarm ใหม่. Swarm-3 selective storefront port เท่านั้น คง guard/error/CI main. Queue: `vault/06-Agent-Logs/WSTERA-House/briefs/DECISION-CARETAKER-INDEPENDENT-QUEUE-2026-09-26.md`; STATUS A-5/A-6.
+- [ ] **[WSTERA House] Caretaker + independent queue (Codex / Claude Swarm lane)** - 2026-09-27: R5 core F-11/F-12/F-13 independent review PASS; F-14 UI/listing/dashboard ค้าง ให้แยก source/tests/review ก่อนเสนอ apply Swarm-1 LAB; runtime proof หลัง Lane B ก–ง PASS + Owner GO. B2/release HOLD. Claude เตรียมบรีฟ, base รอผู้คุม snapshot R5. Git/STATUS Codex คนเดียว. Decision: `vault/06-Agent-Logs/WSTERA-House/briefs/DECISION-CARETAKER-SWARM-1-R5-F14-2026-09-27.md`; independent queue 4A/3/5A/7 ตามเอกสารเดิม ไม่ถูกยกเลิก.
 - [ ] **[wstera-catalog] แก้บั๊กแคชหน้าลูกค้า (สำเนาสินค้าที่ถอดแล้วค้าง) + build ใหม่ (Codex)** - รอ Codex รายงาน "ทำแล้ว รอผู้ตรวจอิสระ" บน branch `phase2e-cache` → Claude ตรวจซ้ำ → เจ้าของอนุมัติ deploy · เหตุผล: เว็บโดน Error 1102 (CPU เกินแผนฟรี) เจ้าของยังไม่อัปเกรด ต้องส่งลิงก์ลูกค้าวันนี้ · รายละเอียด: `vault/06-Agent-Logs/wstera-catalog/2026-09-21-HANDOFF-next-chat.md`
   - [ ] ส่งลิงก์ลูกค้าได้เฉพาะหน้าปลีก `/p/bmw-c400gt` `/all` — ห้ามส่งลิงก์ตัวแทนจนกว่าตรวจราคาส่งรั่วเสร็จ
   - [ ] ส่วนลดต่อสินค้า (migration 0005 + ฟอร์ม AGY) หลังเว็บนิ่ง · Phase 3 og tag LINE หลังเว็บนิ่ง
