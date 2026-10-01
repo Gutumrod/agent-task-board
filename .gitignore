@@ -1,0 +1,9 @@
+# สร้างโดยสคริปต์ — ไม่ commit artefact/ผลลัพธ์ที่สร้างใหม่
+status.html
+tmp.html
+docs/proof/*.png
+docs/proof/browser-proof.json
+docs/proof/browser-proof.err
+docs/proof/overflow-audit.json
+docs/proof/overflow-audit.err
+node_modules/

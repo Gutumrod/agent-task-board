@@ -1,0 +1,14 @@
+{
+  "name": "task-board-status",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "หน้า status อ่านอย่างเดียวสำหรับ WSTERA House (บรีฟ 24 HOUSE-TASKBOARD-AUTOVIEW) — ไม่มี dependency ภายนอก",
+  "scripts": {
+    "build": "node build-status.mjs",
+    "status": "node build-status.mjs",
+    "watch": "node build-status.mjs --watch",
+    "test": "node --test test/*.test.mjs",
+    "test:fail-before": "node scripts/fail-before.mjs"
+  }
+}
