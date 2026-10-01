@@ -188,6 +188,18 @@ test('หน้าเว็บ: ไฟล์เดียว ไม่โหล�
   assert.match(html, /\.secrets|ห้าม|อ่านเท่านั้น/);
 });
 
+test('หน้าเว็บ: จอเล็กมาก (≤430px) ต้องเปลี่ยนตาราง claim เป็นการ์ด พร้อม label', () => {
+  const m = buildModel({ vault: VAULT, board: BOARD, out: path.join(BOARD, 'tmp.html'),
+    intervalSec: 60, maxCards: 10, pull: false, json: false, nowIso: '2026-10-01T05:30:00Z' });
+  const html = renderHtml(m);
+  assert.match(html, /@media\s*\(max-width:430px\)/, 'ต้องมี breakpoint สำหรับจอเล็กมาก');
+  assert.match(html, /table\.claims thead\{display:none\}/, 'ต้องซ่อนหัวตารางบนจอเล็ก');
+  assert.match(html, /td:before\{content:attr\(data-label\)/, 'ต้องแสดง label ให้แต่ละช่อง');
+  for (const label of ['งาน', 'ใคร', 'เริ่ม (ICT)', 'งานที่ทำ']) {
+    assert.ok(html.includes(`data-label="${label}"`), `ต้องมี data-label="${label}" ในการ์ด claim`);
+  }
+});
+
 test('หน้าเว็บ: --max-cards ถูกใช้จริง และเวลาเกิด/เก่าแสดงชัด', () => {
   const m = buildModel({ vault: VAULT, board: BOARD, out: path.join(BOARD, 'tmp.html'),
     intervalSec: 60, maxCards: 2, pull: false, json: false, nowIso: '2026-10-01T05:30:00Z' });

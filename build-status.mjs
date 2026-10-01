@@ -438,11 +438,12 @@ function verdictClass(v) {
 }
 
 function claimRow(c) {
+  const started = c.startedMs ? fmtICT(c.startedMs) : c.started;
   return `<tr>
-    <td><strong>${escapeHtml(c.task)}</strong><br><span class="muted">${escapeHtml(c.file)}</span></td>
-    <td>${escapeHtml(c.agent)}<br><span class="muted">${escapeHtml(c.machine)}</span></td>
-    <td>${escapeHtml(c.startedMs ? fmtICT(c.startedMs) : c.started)}</td>
-    <td>${escapeHtml(truncate(c.work, 160) || '—')}${c.issues.length ? `<br><span class="warn">⚠ ${escapeHtml(c.issues.join(' · '))}</span>` : ''}</td>
+    <td data-label="งาน"><strong>${escapeHtml(c.task)}</strong><br><span class="muted">${escapeHtml(c.file)}</span></td>
+    <td data-label="ใคร">${escapeHtml(c.agent)}<br><span class="muted">${escapeHtml(c.machine)}</span></td>
+    <td data-label="เริ่ม (ICT)">${escapeHtml(started)}</td>
+    <td data-label="งานที่ทำ">${escapeHtml(truncate(c.work, 160) || '—')}${c.issues.length ? `<br><span class="warn">⚠ ${escapeHtml(c.issues.join(' · '))}</span>` : ''}</td>
   </tr>`;
 }
 
@@ -521,6 +522,15 @@ li{margin:8px 0}
 button{font-size:1rem;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:var(--badge);color:var(--fg);min-height:44px}
 footer{margin-top:26px;color:var(--muted);font-size:.85rem}
 @media (max-width:420px){body{font-size:18px}th,td{font-size:.95rem}table.claims col.c1{width:40%}table.claims col.c2{width:16%}}
+/* จอเล็กมาก: เปลี่ยนตาราง claim เป็นการ์ดอ่านง่าย (label + ค่า) กันการล้นและอ่านยาก */
+@media (max-width:430px){
+  table.claims thead{display:none}
+  table.claims,table.claims tbody,table.claims tr,table.claims td{display:block;width:100%}
+  table.claims colgroup{display:none}
+  table.claims tr{border:1px solid var(--line);border-radius:10px;padding:8px;margin:0 0 10px}
+  table.claims td{border-bottom:0;padding:3px 0;font-size:1rem}
+  table.claims td:before{content:attr(data-label) ": ";color:var(--muted);font-weight:600}
+}
 </style></head>
 <body><div class="wrap">
 <div id="bar">

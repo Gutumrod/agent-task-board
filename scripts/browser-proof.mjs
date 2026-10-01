@@ -148,6 +148,10 @@ for (const [w, h, mobile, label] of [
     const fl = path.join(OUT_DIR, `status-${label}px-light.png`);
     fs.writeFileSync(fl, Buffer.from(shotL.data, 'base64'));
     shots.push(fl);
+    const scr = await send('Page.captureScreenshot', { format: 'png' }, sessionId);
+    const fs1 = path.join(OUT_DIR, `status-${label}px-screen.png`);
+    fs.writeFileSync(fs1, Buffer.from(scr.data, 'base64'));
+    shots.push(fs1);
   }
 
   if (label === '375' || label === '1280') {
@@ -159,6 +163,10 @@ for (const [w, h, mobile, label] of [
     const f = path.join(OUT_DIR, `status-${label}px-dark.png`);
     fs.writeFileSync(f, Buffer.from(shot.data, 'base64'));
     shots.push(f);
+    const scr2 = await send('Page.captureScreenshot', { format: 'png' }, sessionId);
+    const f2 = path.join(OUT_DIR, `status-${label}px-dark-screen.png`);
+    fs.writeFileSync(f2, Buffer.from(scr2.data, 'base64'));
+    shots.push(f2);
   }
 }
 
