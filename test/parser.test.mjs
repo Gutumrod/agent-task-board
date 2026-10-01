@@ -25,8 +25,12 @@ const FX = path.join(HERE, 'fixtures');
 const VAULT = 'D:\\AI-Workspace\\vault';
 const BOARD = path.dirname(HERE);
 
-const roomText = fs.readFileSync(path.join(FX, 'room-edge.md'), 'utf8');
-const tasksText = fs.readFileSync(path.join(FX, 'TASKS.md'), 'utf8');
+/** F2 (บรีฟ 24b): อ่านไฟล์แล้ว normalize CRLF -> LF ให้เหมือน readTextSafe ของแอป
+ *  (พฤติกรรมแอปไม่แก้ — แก้แค่ฝั่งเทสต์ ให้ checkout แบบ CRLF ก็รันผ่าน) */
+const readText = (p) => fs.readFileSync(p, 'utf8').replace(/\r\n/g, '\n');
+
+const roomText = readText(path.join(FX, 'room-edge.md'));
+const tasksText = readText(path.join(FX, 'TASKS.md'));
 
 /* ============================== claims ================================== */
 
@@ -160,6 +164,40 @@ test('ความลับ: ปิดคีย์/รหัส/connection strin
   assert.equal(redact(`SHA: ${sha}`), `SHA: ${sha}`, 'SHA ต้องไม่ถูกปิด (ใช้ตรวจงาน)');
 });
 
+/* ============================ redaction (F3) ============================= */
+
+test('ความลับ F3: ปิด Resend / sk-proj- sk-ant- / Discord+Slack webhook — ค่าปลอมประกอบในเทสต์', () => {
+  // ประกอบค่าปลอมจากชิ้นส่วน (ไม่ใส่คีย์จริง)
+  const P = 'AbCdEf0123456789AbCdEf0123456789';   // ชิ้นส่วนกลาง
+  const cases = [
+    ['Resend', 're_' + 'aB3dE5f7G9hJ2kL4mN6pQ8rS'],
+    ['OpenAI sk-proj', 'sk-proj-' + 'Aa1Bb2Cc3Dd4Ee5Ff6Gg7Hh8'],
+    ['Anthropic sk-ant', 'sk-ant-api03-' + 'Zz9Yy8Xx7Ww6Vv5Uu4Tt3'],
+    ['sk- ยาว ๆ', 'sk-' + P],
+    ['Discord webhook', 'https://discord.com/api/webhooks/123456789012345678/' + P + P],
+    ['Discord (discordapp)', 'https://discordapp.com/api/webhooks/987654321098765432/' + P],
+    ['Slack webhook', 'https://hooks.slack.com/services/T00000000/B11111111/' + P],
+  ];
+  for (const [name, secret] of cases) {
+    const out = redact(`note: ${secret} end`);
+    assert.ok(!out.includes(secret), `${name}: ต้องถูกปิด (ได้: ${out})`);
+    assert.match(out, /\[REDACTED:/, `${name}: ต้องเหลือร่องรอย [REDACTED:...]`);
+    assert.equal(looksLikeSecret(out), false, `${name}: โพรบต้องไม่เห็นคีย์เหลือ`);
+  }
+});
+
+test('ความลับ F3: ต้องไม่กินผิด — commit SHA / sha256 / UUID / sb_publishable ไม่ถูกปิด', () => {
+  const keep = [
+    'f97642cc6a8ed950b528ed40d2e498fc8213c48e',                                  // commit SHA 40 hex
+    '4badf98ee3a473c2ab871fa6598e3087c2760631af77c2e8ab190732ed27234e',          // sha256 64 hex
+    '123e4567-e89b-12d3-a456-426614174000',                                      // UUID
+    'sb_publishable_' + 'AbCdEf0123456789AbCdEf01',                              // public key
+  ];
+  for (const v of keep) {
+    assert.equal(redact(v), v, `ต้องไม่ถูกแตะ: ${v}`);
+  }
+});
+
 /* =============================== TASKS ================================== */
 
 test('TASKS.md: การ์ด (CEO)/(Owner) ที่ยังไม่เสร็จ = รอ Owner', () => {
@@ -218,12 +256,12 @@ test('smoke: อ่านต้นทางจริงได้ ไม่ throw
   for (const c of claims.items) {
     assert.ok(c.agent && c.started && c.work, `claim จริงขาดฟิลด์: ${c.file}`);
   }
-  const room = fs.readFileSync(path.join(VAULT, '00-System', '3musketeers', 'room.md'), 'utf8');
+  const room = readText(path.join(VAULT, '00-System', '3musketeers', 'room.md'));
   const cards = parseRoom(room);
   assert.ok(cards.cards.length > 0, 'room.md จริงต้องมีหัวข้ออย่างน้อย 1');
   const withHeader = cards.cards.filter((c) => c.headerFound > 0);
   assert.ok(withHeader.length > 0, 'ต้องอ่านหัว 6 บรรทัดจาก room.md จริงได้');
-  const tasks = parseTasks(fs.readFileSync(path.join(BOARD, 'TASKS.md'), 'utf8'));
+  const tasks = parseTasks(readText(path.join(BOARD, 'TASKS.md')));
   assert.ok(tasks.length > 0, 'TASKS.md จริงต้องมีการ์ด');
   assert.ok(tasks.some((t) => t.ownerTag), 'TASKS.md จริงต้องมีการ์ดที่รอ Owner');
 });

@@ -111,6 +111,12 @@ const REDACTION_RULES = [
   [/\bxox[baprs]-[A-Za-z0-9-]{8,}/g, '[REDACTED:slack-token]'],
   [/\bAKIA[0-9A-Z]{16}\b/g, '[REDACTED:aws-key]'],
   [/\bAIza[0-9A-Za-z_-]{30,}/g, '[REDACTED:google-key]'],
+  // ── F3 (บรีฟ 24b): ช่องว่างที่ผู้คุมเจอ — ใช้ตัวคั่นได้ทั้ง '_' และ '-' จึงไม่ต้องลอก pattern เดิมมาซ้ำ ──
+  [/\bre_[A-Za-z0-9]{20,}/g, '[REDACTED:resend-key]'],                          // Resend (บ้านนี้ใช้อยู่)
+  [/\bsk-(?:proj|ant|svcacct|admin)-[A-Za-z0-9_-]{16,}/g, '[REDACTED:api-key]'],  // OpenAI / Anthropic / GCP
+  [/\bsk-[A-Za-z0-9]{20,}/g, '[REDACTED:api-key]'],                              // sk-<ยาว> แบบไม่มีคำนำหน้า
+  [/https?:\/\/(?:[A-Za-z0-9.-]*\.)?discord(?:app)?\.com\/api\/webhooks\/\d+\/[A-Za-z0-9._-]{20,}/g, '[REDACTED:webhook-url]'],
+  [/https?:\/\/hooks\.slack\.com\/(?:services|workflows|triggers)\/[A-Za-z0-9._\/-]{16,}/g, '[REDACTED:webhook-url]'],
   [/(postgres(?:ql)?:\/\/[^:\s/@]+:)[^@\s/]+(@)/gi, '$1[REDACTED]$2'],
   [/((?:password|passwd|pwd|secret|token|api[_-]?key|apikey|authorization|bearer|credential)s?"?\s*[:=]\s*)("[^"]*"|'[^']*'|[^\s,;"']{5,})/gi,
     '$1[REDACTED]'],
@@ -121,8 +127,12 @@ export function redact(input) {
   let s = String(input == null ? '' : input);
   if (MUTATE === 'redact') return s; // mutation สำหรับพิสูจน์ fail-before ของเทสต์เท่านั้น
   for (const [re, rep] of REDACTION_RULES) s = s.replace(re, rep);
-  // opaque blob (base64 ยาว) — ยกเว้น hex ล้วนซึ่งมักเป็น SHA ของ commit
-  s = s.replace(/\b[A-Za-z0-9+/]{40,}={0,2}\b/g, (m) => (/^[0-9a-f]+$/i.test(m) ? m : '[REDACTED:opaque]'));
+  // opaque blob (base64 ยาว) — ยกเว้นสิ่งที่ต้องอ่านได้: hex ล้วน (commit SHA / sha256) และ public key
+  s = s.replace(/\b[A-Za-z0-9+/]{40,}={0,2}\b/g, (m) => {
+    if (/^[0-9a-f]+$/i.test(m)) return m;                 // commit SHA 40 hex / sha256 64 hex
+    if (/^sb_publishable_/i.test(m)) return m;            // public key ใช้เปิดเผยได้
+    return '[REDACTED:opaque]';
+  });
   return s;
 }
 
@@ -134,6 +144,8 @@ export function looksLikeSecret(s) {
     /\b(?:sk|rk)_(?:live|test)_[A-Za-z0-9]{8,}/, /\bwhsec_[A-Za-z0-9]{8,}/,
     /\bsb_secret_[A-Za-z0-9_-]{8,}/, /\beyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\./,
     /postgres(?:ql)?:\/\/[^:\s/@]+:[^@\s/]+@/, /\bAKIA[0-9A-Z]{16}\b/, /\bghp_[A-Za-z0-9]{10,}/,
+    /\bre_[A-Za-z0-9]{20,}/, /\bsk-(?:proj|ant|svcacct|admin)-[A-Za-z0-9_-]{16,}/, /\bsk-[A-Za-z0-9]{20,}/,
+    /discord(?:app)?\.com\/api\/webhooks\/\d+\//, /hooks\.slack\.com\/(?:services|workflows|triggers)\//,
   ];
   return probes.some((re) => re.test(cleaned));
 }
@@ -626,8 +638,11 @@ function buildOnce(o, prevSig) {
   let old = '';
   try { old = fs.readFileSync(o.out, 'utf8'); } catch { /* new file */ }
   if (prevSig != null && old === html) wrote = false;
-  else if (old !== html) { fs.writeFileSync(o.out, html, 'utf8'); wrote = true; }
-  process.stderr.write(`[build-status] ${new Date().toISOString()} claims=${model.stats.claimsActive} cards=${model.stats.cardsShown} ownerWait=${model.stats.ownerWait} paste=${model.stats.pasteCandidates} ${wrote ? 'เขียน status.html' : 'ไม่เปลี่ยน ไม่เขียนทับ'}\n`);
+  else if (old !== html) {
+    fs.writeFileSync(o.out, html, 'utf8');
+    wrote = true;
+  }
+  process.stderr.write(`[build-status] ${new Date().toISOString()} claims=${model.stats.claimsActive} cards=${model.stats.cardsShown} ownerWait=${model.stats.ownerWait} paste=${model.stats.pasteCandidates} ${wrote ? `เขียน ${path.basename(o.out)}` : 'ไม่เปลี่ยน ไม่เขียนทับ'}\n`);
   return { model, wrote };
 }
 
