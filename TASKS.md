@@ -107,3 +107,4 @@
 
 
 
+- [x] **[BK01 booking] HOUSE-BK01-P1-SQL-G09-G10 (Codex)** - ✅ 2026-10-02 — branch `codex/bk01-p1-g09-g10-20261002` @ `2a772e46a5dca42df2bf23429552972d9396f49e`, pushed. Migration `20261002150000` only; frozen 120000/130000/140000 and allowlist unchanged. Fresh PG17.11 W-1 full replay: baseline red 9/16, after 23/23, rollback raw diff `[]`, reapply 23/23; runtime 21; npm test 340/340, policy/verify PASS. Ready OpenCode + AGY review; `UPLOAD_INTENT_LIMIT` app copy follow-up; LAB/prod/GO/merge untouched. Report `D:/AI-Workspace/vault/06-Agent-Logs/WSTERA-House/reports/REPORT-CODEX-HOUSE-BK01-P1-G09-G10-2026-10-02.md`; footer at end of room.md.
