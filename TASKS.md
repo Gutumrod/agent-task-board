@@ -108,6 +108,7 @@
   - [x] ~~ทดสอบคลิป 5 นาที~~ → **วิเคราะห์จาก data** (ไม่มีไฟล์ทดสอบยาว) — large-v3 ใช้ ~7-8 GB ✅
   - [x] ~~ทดสอบคลิป 15 นาที~~ → **วิเคราะห์จาก data** — medium ปลอดภัย ~5.5-6.5 GB, large-v3 เสี่ยง ~8-9 GB
   - [x] ~~ทดสอบคลิป 30 นาที~~ → **วิเคราะห์จาก data** — medium ~7-8 GB, large-v3 ❌ เสี่ยง OOM
+- [x] **[Help me pls] Phase B1 — D1 persistence (Codex)** - ✅ 2026-10-06: commit `7214123` on `codex/phase-b1-d1-persistence`; local D1 suite 9/9, unit 21/21, lint/typecheck/build/smoke/vinext/spike probes PASS. Hosted D1/deploy/R2/Queue/Cron/LINE/real dispatch untouched; awaiting Owner review. Report: `docs/21-PHASE-B1-D1-IMPLEMENTATION-REPORT.md`; vault log: `vault/06-Agent-Logs/Help-me-pls/2026-10-06-phase-b1-d1-implementation.md`
 - [x] **[WSTERA House] HOUSE-PRE-MAC-MOVE-001 archive + Mac setup checklist (Codex)** - ✅ 2026-09-25: vault `WSTERA-House/REPORT-CODEX-PRE-MAC-MOVE-2026-09-25.md`; archive 968 text files, checklist 9 products; Owner ยังต้องจัด secret และเลือก Hermes primary; ประเด็น raw log ใน Git history อยู่ในรายงาน
 - [x] **[WSTERA House] HOUSE-UNBLOCK-LIVE-WINDOW-20260928 source pack (Codex)** - ✅ Steps 1–4 source-level: rollback PGlite 36/36, issuer tests 6/6 + hook 6/6 + store/rollback 8/8, storage grant PGlite 10/10, H3D checker pinned/runbook ready. PARTIAL overall: no LAB; independent review, executable live capture, Owner window, and BK01 storage integration remain. Report: `vault/06-Agent-Logs/WSTERA-House/reports/REPORT-CODEX-HOUSE-UNBLOCK-LIVE-WINDOW-2026-09-28.md`
 
